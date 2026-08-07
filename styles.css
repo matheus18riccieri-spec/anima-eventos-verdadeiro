@@ -423,6 +423,88 @@ a {
   font-size: 0.92rem;
 }
 
+/* ---------- Galeria ---------- */
+.gallery-carousel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.gallery-track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 6px 2px 18px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.gallery-track::-webkit-scrollbar {
+  display: none;
+}
+.gallery-slide {
+  flex: 0 0 auto;
+  width: min(300px, 72vw);
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  scroll-snap-align: center;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.gallery-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gallery-arrow {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+.gallery-arrow:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.gallery-arrow svg {
+  width: 20px;
+  height: 20px;
+}
+.gallery-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.gallery-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--line);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+.gallery-dot.active {
+  background: var(--gold);
+  transform: scale(1.3);
+}
+
 /* ---------- Diferenciais ---------- */
 .diff-grid {
   display: grid;
@@ -626,6 +708,9 @@ a {
   .services-grid,
   .diff-grid {
     grid-template-columns: 1fr;
+  }
+  .gallery-arrow {
+    display: none;
   }
 }
 
