@@ -61,6 +61,52 @@ if (galleryTrack) {
   document.querySelector('.gallery-next').addEventListener('click', () => scrollBySlide(1))
 }
 
+document.querySelectorAll('.catalog-item').forEach(item => {
+  const track = item.querySelector('.catalog-track')
+  const dotsWrap = item.querySelector('.catalog-dots')
+  if (!track || !dotsWrap) return
+
+  const slides = Array.from(track.children)
+
+  const dots = slides.map((slide, i) => {
+    const dot = document.createElement('button')
+    dot.type = 'button'
+    dot.className = 'catalog-dot'
+    dot.setAttribute('aria-label', `Ir para foto ${i + 1}`)
+    dot.addEventListener('click', () => {
+      slide.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+    })
+    dotsWrap.appendChild(dot)
+    return dot
+  })
+
+  const setActiveDot = index => {
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === index))
+  }
+  setActiveDot(0)
+
+  if ('IntersectionObserver' in window) {
+    const dotObserver = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveDot(slides.indexOf(entry.target))
+          }
+        }
+      },
+      { root: track, threshold: 0.6 },
+    )
+    slides.forEach(slide => dotObserver.observe(slide))
+  }
+
+  const scrollBySlide = dir => {
+    const amount = slides[0].getBoundingClientRect().width + 16
+    track.scrollBy({ left: amount * dir, behavior: 'smooth' })
+  }
+  item.querySelector('.catalog-prev')?.addEventListener('click', () => scrollBySlide(-1))
+  item.querySelector('.catalog-next')?.addEventListener('click', () => scrollBySlide(1))
+})
+
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver(
     entries => {
