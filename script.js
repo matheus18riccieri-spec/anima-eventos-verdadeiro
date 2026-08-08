@@ -19,16 +19,33 @@ mainNav.querySelectorAll('a').forEach(link => {
 
 const galleryTrack = document.getElementById('galleryTrack')
 if (galleryTrack) {
-  const slides = Array.from(galleryTrack.children)
+  const realSlides = Array.from(galleryTrack.children)
   const dotsWrap = document.getElementById('galleryDots')
+  const count = realSlides.length
 
-  const dots = slides.map((slide, i) => {
+  realSlides.forEach((slide, i) => slide.setAttribute('data-index', String(i)))
+
+  const cloneSet = () =>
+    realSlides.map(slide => {
+      const clone = slide.cloneNode(true)
+      clone.setAttribute('aria-hidden', 'true')
+      return clone
+    })
+
+  const beforeClones = cloneSet()
+  const afterClones = cloneSet()
+  beforeClones.forEach(clone => galleryTrack.insertBefore(clone, galleryTrack.firstChild))
+  afterClones.forEach(clone => galleryTrack.appendChild(clone))
+
+  const allSlides = Array.from(galleryTrack.children)
+
+  const dots = realSlides.map((slide, i) => {
     const dot = document.createElement('button')
     dot.type = 'button'
     dot.className = 'gallery-dot'
     dot.setAttribute('aria-label', `Ir para foto ${i + 1}`)
     dot.addEventListener('click', () => {
-      slide.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
+      realSlides[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })
     })
     dotsWrap.appendChild(dot)
     return dot
@@ -39,22 +56,46 @@ if (galleryTrack) {
   }
   setActiveDot(0)
 
+  const blockWidth = () => count * (realSlides[0].getBoundingClientRect().width + 18)
+
+  const jumpTo = left => {
+    const prevBehavior = galleryTrack.style.scrollBehavior
+    galleryTrack.style.scrollBehavior = 'auto'
+    galleryTrack.scrollLeft = left
+    galleryTrack.style.scrollBehavior = prevBehavior
+  }
+
+  jumpTo(blockWidth())
+
+  let settleTimer
+  galleryTrack.addEventListener('scroll', () => {
+    clearTimeout(settleTimer)
+    settleTimer = setTimeout(() => {
+      const width = blockWidth()
+      if (galleryTrack.scrollLeft < width) {
+        jumpTo(galleryTrack.scrollLeft + width)
+      } else if (galleryTrack.scrollLeft >= width * 2) {
+        jumpTo(galleryTrack.scrollLeft - width)
+      }
+    }, 120)
+  })
+
   if ('IntersectionObserver' in window) {
     const dotObserver = new IntersectionObserver(
       entries => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            setActiveDot(slides.indexOf(entry.target))
+            setActiveDot(Number(entry.target.getAttribute('data-index')))
           }
         }
       },
       { root: galleryTrack, threshold: 0.6 },
     )
-    slides.forEach(slide => dotObserver.observe(slide))
+    allSlides.forEach(slide => dotObserver.observe(slide))
   }
 
   const scrollBySlide = dir => {
-    const amount = slides[0].getBoundingClientRect().width + 18
+    const amount = realSlides[0].getBoundingClientRect().width + 18
     galleryTrack.scrollBy({ left: amount * dir, behavior: 'smooth' })
   }
   document.querySelector('.gallery-prev').addEventListener('click', () => scrollBySlide(-1))

@@ -508,6 +508,7 @@ a {
 /* ---------- Catálogo ---------- */
 .catalog-list {
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 28px;
 }
 .catalog-item {
@@ -517,6 +518,7 @@ a {
   padding: 28px;
   display: grid;
   gap: 20px;
+  min-width: 0;
 }
 .catalog-info h3 {
   margin: 0 0 8px;
@@ -531,11 +533,13 @@ a {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
 .catalog-track {
   display: flex;
   gap: 16px;
   overflow-x: auto;
+  min-width: 0;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding: 4px 2px 14px;
@@ -547,7 +551,7 @@ a {
 }
 .catalog-slide {
   flex: 0 0 auto;
-  width: min(240px, 60vw);
+  width: min(200px, 55vw);
   aspect-ratio: 4 / 5;
   margin: 0;
   scroll-snap-align: center;
@@ -697,8 +701,12 @@ a {
 
 /* ---------- Footer ---------- */
 .site-footer {
+  background: var(--cream);
   border-top: 1px solid var(--line);
   padding: 40px 0;
+}
+.site-footer .brand-text strong {
+  color: #ffffff;
 }
 .footer-inner {
   display: flex;
@@ -706,18 +714,18 @@ a {
   align-items: center;
   gap: 10px;
   text-align: center;
-  color: var(--cream-dim);
+  color: rgba(255, 255, 255, 0.78);
   font-size: 0.88rem;
 }
 .footer-copy {
-  color: #7c85b3;
+  color: rgba(255, 255, 255, 0.45);
   font-size: 0.8rem;
 }
 .footer-credit {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #7c85b3;
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.8rem;
   margin-top: 4px;
 }
@@ -807,7 +815,8 @@ a {
     display: flex;
   }
   .services-grid,
-  .diff-grid {
+  .diff-grid,
+  .catalog-list {
     grid-template-columns: 1fr;
   }
   .gallery-arrow,
