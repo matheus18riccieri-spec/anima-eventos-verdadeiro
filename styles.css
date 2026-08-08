@@ -21,6 +21,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -36,6 +37,8 @@ body {
     sans-serif;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
 }
 
 img {
@@ -508,7 +511,7 @@ a {
 /* ---------- Catálogo ---------- */
 .catalog-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 28px;
 }
 .catalog-item {
@@ -551,7 +554,7 @@ a {
 }
 .catalog-slide {
   flex: 0 0 auto;
-  width: min(200px, 55vw);
+  width: min(160px, 48vw);
   aspect-ratio: 4 / 5;
   margin: 0;
   scroll-snap-align: center;
@@ -781,7 +784,8 @@ a {
     grid-template-columns: 1fr;
   }
   .services-grid,
-  .diff-grid {
+  .diff-grid,
+  .catalog-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
